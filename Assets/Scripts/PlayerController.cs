@@ -14,29 +14,40 @@ public class PlayerController : MonoBehaviour
     public Text winLoseText;
     public Image winLoseBG;
 
-    // Start is called before the first frame update
     void Start()
     {
-        winLoseBG.enabled = false;
+        // Check if the necessary references are assigned
+        if (winLoseBG != null)
+            winLoseBG.enabled = false;
+        else
+            Debug.LogError("winLoseBG reference not assigned in the inspector!");
+
+        if (scoreText != null)
+            SetScoreText();
+        else
+            Debug.LogError("scoreText reference not assigned in the inspector!");
     }
 
     void Update()
     {
         if (health == 0)
         {
-            winLoseBG.enabled = true;
-            winLoseText.text = "Game Over!";
-            winLoseText.color = Color.white;
-            winLoseBG.color = Color.red;
+            if (winLoseBG != null)
+            {
+                winLoseBG.enabled = true;
+                winLoseText.text = "Game Over!";
+                winLoseText.color = Color.white;
+                winLoseBG.color = Color.red;
+            }
             StartCoroutine(LoadScene(3));
         }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SceneManager.LoadScene("menu");
         }
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");
@@ -61,22 +72,31 @@ public class PlayerController : MonoBehaviour
         }
         if (other.CompareTag("Goal"))
         {
-            winLoseBG.enabled = true;
-            winLoseText.text = "You Win!";
-            winLoseText.color = Color.black;
-            winLoseBG.color = Color.green;
+            if (winLoseBG != null)
+            {
+                winLoseBG.enabled = true;
+                winLoseText.text = "You Win!";
+                winLoseText.color = Color.black;
+                winLoseBG.color = Color.green;
+            }
             StartCoroutine(LoadScene(3));
         }
     }
 
     void SetScoreText()
     {
-        scoreText.text = "Score: " + score;
+        if (scoreText != null)
+            scoreText.text = "Score: " + score;
+        else
+            Debug.LogError("scoreText reference not assigned in the inspector!");
     }
 
     void SetHealthText()
     {
-        healthText.text = "Health: " + health;
+        if (healthText != null)
+            healthText.text = "Health: " + health;
+        else
+            Debug.LogError("healthText reference not assigned in the inspector!");
     }
 
     IEnumerator LoadScene(float seconds)
